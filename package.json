@@ -1,0 +1,11 @@
+{
+  "name": "yr-warning-icons",
+  "version": "1.0.0",
+  "description": "Warning icons for yr.no",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Simen Saegrov",
+  "license": "MIT"
+}
