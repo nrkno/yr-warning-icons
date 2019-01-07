@@ -1,0 +1,4 @@
+plugins:
+  - removeAttrs:
+      elemSeparator: '-'
+      attrs: 'data.*'

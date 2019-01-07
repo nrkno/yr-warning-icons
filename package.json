@@ -4,8 +4,11 @@
   "description": "Warning icons for yr.no",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "prebuild-svg": "docker build -t yr-warning-icons .",
+    "build-svg": "docker run -v $PWD/design/svg/:/input -v $PWD/dist/svg:/output -it yr-warning-icons "
   },
   "author": "Simen Saegrov",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
 }
