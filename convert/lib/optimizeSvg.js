@@ -112,6 +112,11 @@ const svgOptimize = new OptimizeSvg({
     },
     {
       removeAttrs: { attrs: "data.*" }
+    },
+    {
+      inlineStyles: {
+        onlyMatchedOnce: false
+      }
     }
   ]
 });
