@@ -4,11 +4,19 @@
   "description": "Warning icons for yr.no",
   "main": "index.js",
   "scripts": {
-    "prebuild-svg": "docker build -t yr-warning-icons .",
-    "build-svg": "docker run -v $PWD/design/svg/:/input -v $PWD/dist/svg:/output -it yr-warning-icons "
+    "clean": "rimraf dist/pdf/*.pdf dist/png/*.png dist/svg/*.svg temp/",
+    "preconvert-icons": "docker build -t yr-warning-icons .",
+    "convert-icons": "docker run  -v $PWD/design/:/design -v $PWD/dist:/dist --rm --cap-add=SYS_ADMIN  yr-warning-icons"
   },
   "author": "Simen Saegrov",
   "license": "MIT",
-  "devDependencies": {},
-  "dependencies": {}
+  "devDependencies": {
+    "@types/puppeteer": "^1.11.1",
+    "prettier": "^1.15.3",
+    "puppeteer": "^1.11.0",
+    "svgo": "^1.1.1"
+  },
+  "dependencies": {
+    "rimraf": "^2.6.3"
+  }
 }
