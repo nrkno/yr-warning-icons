@@ -11,9 +11,11 @@
     "convert-icons-win": "docker run  -v %cd%/design/:/design -v %cd%/dist:/dist --rm --cap-add=SYS_ADMIN  yr-warning-icons",
     "prebuild-docs": "rimraf dist/index.html",
     "build-docs": "node --no-warnings build/build-gh-pages.js",
-    "build": "npm run convert-icons && npm run build-docs",
+    "build": "npm run convert-icons && npm run build-docs && npm run zip-icons",
     "predeploy-docs": "npm run build",
-    "deploy-docs": "gh-pages -d dist"
+    "deploy-docs": "gh-pages -d dist",
+    "prezip-icons": "rimraf dist/icons.zip",
+    "zip-icons": "zip dist/icons.zip dist/png/*.png dist/pdf/*.pdf dist/svg/*.svg"
   },
   "author": "Simen Saegrov",
   "license": "MIT",
