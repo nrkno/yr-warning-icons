@@ -16,12 +16,8 @@ RUN apk update && apk upgrade && \
 # Tell Puppeteer to skip installing Chrome. We'll be using the installed package.
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 
-# Install packages needed
-COPY package.json package-lock.json ./
-RUN npm i
-
-# Copy Run scripts to execute
-COPY convert/ convert/
+# Set env file telling the script we're running inside docker
+ENV IS_DOCKER=true
 
 # Create a temp folder for outputing temporary files
 RUN mkdir temp
@@ -32,12 +28,15 @@ RUN addgroup -S pptruser && adduser -S -g pptruser pptruser \
     && chown -R pptruser:pptruser /home/pptruser \
     && chown -R pptruser:pptruser /temp
 
+# Install packages needed
+COPY package.json package-lock.json ./
+RUN npm i
+
+# Copy Run scripts to execute
+COPY convert/ convert/
 
 # Run everything after as non-privileged user.
 USER pptruser
-
-# Set env file telling the script we're running inside docker
-ENV IS_DOCKER=true
 
 CMD ["node", "--no-warnings", "convert/convertSvg.js"]
 
