@@ -73,8 +73,11 @@ const wrapContentInHtmlPage = content => `
       }
 
       .icon-card__icons-wrapper img {
+        --icon-size: 100px;
         height: 100px;
         width: 100px;
+        height: var(--icon-size);
+        width: var(--icon-size);
       }
       </style>
   </head>
