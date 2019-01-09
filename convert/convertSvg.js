@@ -19,7 +19,10 @@ const inputFolder = `design/svg`;
       const svgFile = await fs.readFile(path.resolve(inputFolder, icon));
       const page = await createPuppeteerPage(svgFile, iconName);
 
-      const optimizedSvgIcon = await optimizeSvg(svgFile);
+      const optimizedSvgIcon = await optimizeSvg(
+        svgFile,
+        iconName.replace("icon-warning", "yr") // Icon name is use to prefix IDs in the SVGs. Replace icon-warning with yr to save a few bytes
+      );
       const pngIcon = await page.screenshot({
         type: "png",
         omitBackground: true
