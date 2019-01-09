@@ -2,7 +2,6 @@ const puppeteer = require("puppeteer");
 const tempFolder = "temp";
 const path = require("path");
 const fs = require("fs").promises;
-const config = require("./config");
 
 const puppeteerOptions = process.env.IS_DOCKER
   ? {
@@ -24,7 +23,7 @@ module.exports = async function createBrowser(svg, iconName) {
 
   const browser = await puppeteer.launch(puppeteerOptions);
   const page = await browser.newPage();
-  await page.setViewport({ width: config.size, height: config.size });
+
   await page.goto(`file://${htmlPath}`);
   return Promise.resolve(page);
 };

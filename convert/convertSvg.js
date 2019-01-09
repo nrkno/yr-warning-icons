@@ -20,11 +20,24 @@ const inputFolder = `design/svg`;
       const page = await createPuppeteerPage(svgFile, iconName);
 
       const optimizedSvgIcon = await optimizeSvg(svgFile);
+
+      await page.setViewport({ width: config.size, height: config.size });
+
       const pngIcon = await page.screenshot({
         type: "png",
         omitBackground: true
       });
 
+      // Enable transparent background for PDF
+      // https://github.com/GoogleChrome/puppeteer/issues/2545
+      await page.emulateMedia("screen");
+      await page._emulationManager._client.send(
+        "Emulation.setDefaultBackgroundColorOverride",
+        { color: { r: 0, g: 0, b: 0, a: 0 } }
+      );
+
+      // The default resolution should be 128x128, but becomes 96x96 for some reason.
+      // See https://github.com/GoogleChrome/puppeteer/issues/2278
       const pdfIcon = await page.pdf({
         width: `${config.size}px`,
         height: `${config.size}px`
