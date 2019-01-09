@@ -2,10 +2,10 @@
   "name": "yr-warning-icons",
   "version": "1.0.0",
   "description": "Warning icons for yr.no",
-  "main": "index.js",
+  "repository": "https://github.com/nrkno/yr-warning-icons",
   "scripts": {
-    "clean": "rimraf dist/pdf/*.pdf dist/png/*.png dist/svg/*.svg temp/",
-    "preconvert-icons": "docker build -t yr-warning-icons .",
+    "clean": "rimraf dist/pdf/*.pdf dist/png/*.png dist/svg/*.svg temp/*.html",
+    "preconvert-icons": "npm run clean && docker build -t yr-warning-icons .",
     "preconvert-icons-win": "npm run preconvert-icons",
     "convert-icons": "docker run  -v $PWD/design/:/design -v $PWD/dist:/dist --rm --cap-add=SYS_ADMIN  yr-warning-icons",
     "convert-icons-win": "docker run  -v %cd%/design/:/design -v %cd%/dist:/dist --rm --cap-add=SYS_ADMIN  yr-warning-icons"
@@ -13,12 +13,12 @@
   "author": "Simen Saegrov",
   "license": "MIT",
   "devDependencies": {
-    "@types/puppeteer": "^1.11.1",
-    "prettier": "^1.15.3",
-    "puppeteer": "^1.11.0",
-    "svgo": "^1.1.1"
+    "@types/puppeteer": "1.11.1",
+    "prettier": "1.15.3",
+    "puppeteer": "1.11.0",
+    "svgo": "1.1.1"
   },
   "dependencies": {
-    "rimraf": "^2.6.3"
+    "rimraf": "2.6.3"
   }
 }
