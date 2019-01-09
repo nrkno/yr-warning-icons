@@ -6,7 +6,11 @@ const OptimizeSvg = require("svgo");
  * @return Promise<string>
  */
 module.exports = function optimizeSvg(svgContent) {
-  return svgOptimize.optimize(svgContent).then(output => output.data);
+  return svgOptimize
+    .optimize(svgContent)
+    .then(output => output.data)
+    .then(svgContentPass2 => svgOptimize.optimize(svgContentPass2))
+    .then(output => output.data);
 };
 
 const svgOptimize = new OptimizeSvg({
