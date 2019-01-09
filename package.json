@@ -6,7 +6,9 @@
   "scripts": {
     "clean": "rimraf dist/pdf/*.pdf dist/png/*.png dist/svg/*.svg temp/*.html",
     "preconvert-icons": "npm run clean && docker build -t yr-warning-icons .",
-    "convert-icons": "docker run  -v $PWD/design/:/design -v $PWD/dist:/dist --rm --cap-add=SYS_ADMIN  yr-warning-icons"
+    "convert-icons": "docker run  -v $PWD/design/:/design -v $PWD/dist:/dist --rm --cap-add=SYS_ADMIN  yr-warning-icons",
+    "prebuild-docs": "rimraf dist/index.html",
+    "build-docs": "node --no-warnings build/build-gh-pages.js"
   },
   "author": "Simen Saegrov",
   "license": "MIT",
