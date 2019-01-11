@@ -94,12 +94,13 @@ const wrapContentInHtmlPage = content => `
         }
 
         .icon-card {
-          padding: 0 20px;
+          padding: 20px;
           display: inline-block;
           background-color: white;
         }
 
         .icon-card h3 {
+          margin-top: 0;
           text-align: center;
           word-break: keep-all;
           white-space: nowrap;
