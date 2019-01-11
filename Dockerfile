@@ -30,7 +30,7 @@ RUN addgroup -S pptruser && adduser -S -g pptruser pptruser \
 
 # Install packages needed
 COPY package.json package-lock.json ./
-RUN npm i
+RUN npm ci
 
 # Copy Run scripts to execute
 COPY convert/ convert/
