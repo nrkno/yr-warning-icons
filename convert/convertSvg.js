@@ -1,11 +1,19 @@
 const fs = require("fs").promises;
+const fsSync = require("fs");
 const path = require("path");
+const puppeteer = require("puppeteer");
+
 const config = require("./lib/config");
 const optimizeSvg = require("./lib/optimizeSvg");
-const createPuppeteerPage = require("./lib/createPuppeteerPage");
+const createHtmlPageWithIcon = require("./lib/createPuppeteerPage");
 
-const outputFolder = "dist";
 const inputFolder = `design/svg`;
+
+const puppeteerOptions = process.env.IS_DOCKER
+  ? {
+      executablePath: "/usr/bin/chromium-browser"
+    }
+  : undefined;
 
 (async () => {
   let svgFiles = await fs.readdir(path.resolve(inputFolder));
@@ -13,15 +21,43 @@ const inputFolder = `design/svg`;
   console.log(
     `Creating png, pdf and optimized svg for ${svgFiles.length} icons.`
   );
+
+  await createFolderIfMissing(path.resolve(config.outputFolder));
+  await createFolderIfMissing(path.resolve(config.tempFolder));
+
+  await createFolderInOutputFolderIfMissing("png");
+  await createFolderInOutputFolderIfMissing("pdf");
+  await createFolderInOutputFolderIfMissing("svg");
+
+  const browser = await puppeteer.launch(puppeteerOptions);
+
   await Promise.all(
     svgFiles.map(async icon => {
       const iconName = icon.replace(".svg", "");
       const svgFile = await fs.readFile(path.resolve(inputFolder, icon));
-      const page = await createPuppeteerPage(svgFile, iconName);
+      const page = await createHtmlPageWithIcon(browser, svgFile, iconName);
 
       const optimizedSvgIcon = await optimizeSvg(svgFile);
 
-      await page.setViewport({ width: config.size, height: config.size });
+      // Using
+      await config.pngSizes.reduce(async (previousPromise, size) => {
+        await previousPromise;
+        await createFolderInOutputFolderIfMissing("png", size.toString());
+
+        await page.setViewport({ width: size, height: size });
+
+        const pngIcon = await page.screenshot({
+          type: "png",
+          omitBackground: true
+        });
+
+        return writeFile(`${iconName}.png`, pngIcon, size.toString());
+      }, Promise.resolve());
+
+      await page.setViewport({
+        width: config.defaultSize,
+        height: config.defaultSize
+      });
 
       const pngIcon = await page.screenshot({
         type: "png",
@@ -39,8 +75,8 @@ const inputFolder = `design/svg`;
       // The default resolution should be 128x128, but becomes 96x96 for some reason.
       // See https://github.com/GoogleChrome/puppeteer/issues/2278
       const pdfIcon = await page.pdf({
-        width: `${config.size}px`,
-        height: `${config.size}px`
+        width: `${config.defaultSize}px`,
+        height: `${config.defaultSize}px`
       });
 
       await Promise.all([
@@ -49,14 +85,44 @@ const inputFolder = `design/svg`;
         writeFile(`${iconName}.svg`, optimizedSvgIcon)
       ]);
 
-      return page.browser().close();
+      console.log("Closing page.");
+      return page ? page.close() : Promise.resolve();
     })
   );
-
+  await browser.close();
   console.log("Finished");
 })();
 
-function writeFile(fileName, content) {
+async function createFolderInOutputFolderIfMissing(...sizes) {
+  const folderPath = path.resolve(config.outputFolder, ...sizes);
+  return createFolderIfMissing(folderPath);
+}
+
+async function createFolderIfMissing(folderPath) {
+  const folderExist = fsSync.existsSync(folderPath);
+
+  if (folderExist) {
+    return Promise.resolve();
+  } else {
+    return fs.mkdir(folderPath);
+  }
+}
+/**
+ *
+ * @param fileName {string}
+ * @param content {any}
+ * @param [sizeFolder] {string} Optional size folder
+ * @return {Promise<void>}
+ */
+function writeFile(fileName, content, sizeFolder = "") {
   const extension = fileName.substr(fileName.length - 3);
-  return fs.writeFile(path.resolve(outputFolder, extension, fileName), content);
+  const fullPath = path.resolve(
+    config.outputFolder,
+    extension,
+    sizeFolder,
+    fileName
+  );
+  return fs.writeFile(fullPath, content).then(() => {
+    console.log("File written: ", fullPath.replace(path.resolve(), ""));
+  });
 }

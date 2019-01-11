@@ -39,5 +39,5 @@ COPY convert/ convert/
 USER pptruser
 
 # Since we use require('fs').promises which is experimental, we turn off warnings
-CMD ["node", "--no-warnings", "convert/convertSvg.js"]
+CMD ["node", "convert/convertSvg.js"]
 

@@ -1,27 +1,20 @@
-const puppeteer = require("puppeteer");
-const tempFolder = "temp";
 const path = require("path");
 const fs = require("fs").promises;
-
-const puppeteerOptions = process.env.IS_DOCKER
-  ? {
-      executablePath: "/usr/bin/chromium-browser"
-    }
-  : undefined;
-
+const config = require("./config");
+const tempFolder = config.tempFolder;
 /**
  *
+ * @param {Browser} browser Puppeteer browser object
  * @param svg {Buffer | string}
  * @param iconName {string}
  * @return {Promise<Page>}
  */
-module.exports = async function createBrowser(svg, iconName) {
+module.exports = async function createHtmlPage(browser, svg, iconName) {
   const html = htmlWithSvg(svg.toString());
 
   const htmlPath = path.resolve(`${tempFolder}/${iconName}.html`);
   await fs.writeFile(htmlPath, html);
 
-  const browser = await puppeteer.launch(puppeteerOptions);
   const page = await browser.newPage();
 
   await page.goto(`file://${htmlPath}`);

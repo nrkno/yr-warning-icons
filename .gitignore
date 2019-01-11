@@ -1,5 +1,3 @@
 node_modules/
 temp/
 dist/
-!dist/**/.gitempty
-!temp/.gitempty
