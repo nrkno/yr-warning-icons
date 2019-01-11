@@ -1,0 +1,10 @@
+build/
+convert/
+design/
+temp/
+.idea/
+.dockerignore
+.gitignore
+Dockerfile
+**/*/.gitempty
+dist/icons.zip
