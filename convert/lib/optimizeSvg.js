@@ -1,6 +1,6 @@
 const OptimizeSvg = require("svgo");
 const inlineUse = require("./inlineUse");
-const removeUnnecessaryGElements = require("./removeUnnecessaryGElements");
+const unwrapGElements = require("./unwrapGElements");
 /**
  *
  * @param svgContent {string | Buffer}
@@ -17,7 +17,7 @@ module.exports = function optimizeSvg(svgContent) {
 const svgOptimize = new OptimizeSvg({
   plugins: [
     {
-      removeUnnecessaryGElements
+      unwrapGElements // Custom plugin
     },
     {
       inlineUse //Custom plugin
