@@ -36,12 +36,12 @@ function iconCard(svgPath) {
   const iconName = svgPath.replace(".svg", "");
   return `
     <div class="icon-card">
-      <h1>${iconName.replace("icon-warning-", "")}</h1>
+      <h3>${iconName}</h3>
       <div class="icon-card__icons-wrapper">
         <img src="svg/${svgPath}" alt="${iconName}" />
         <img src="png/${iconName}.png" alt="${iconName}" />
-        <h2>svg</h2>
-        <h2>png</h2>
+        <h4>svg</h4>
+        <h4>png</h4>
       </div>
     </div>
   `;
@@ -94,14 +94,15 @@ const wrapContentInHtmlPage = content => `
         }
 
         .icon-card {
-          padding: 20px;
+          padding: 0 20px;
           display: inline-block;
           background-color: white;
         }
 
-        .icon-card h1 {
+        .icon-card h3 {
           text-align: center;
           word-break: keep-all;
+          white-space: nowrap;
         }
 
         .icon-card__icons-wrapper {
@@ -111,14 +112,15 @@ const wrapContentInHtmlPage = content => `
           grid-column-gap: 20px;
         }
 
-        .icon-card__icons-wrapper h2 {
+        .icon-card__icons-wrapper h4 {
           text-align: center;
+          margin: 0;
         }
 
         .icon-card__icons-wrapper img {
-          --icon-size: 100px;
-          height: 100px;
-          width: 100px;
+          --icon-size: 75px;
+          height: 75px;
+          width: 75px;
           height: var(--icon-size);
           width: var(--icon-size);
         }
