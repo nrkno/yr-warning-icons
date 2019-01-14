@@ -4,11 +4,11 @@ Warning icons for https://www.yr.no.
 
 All icons are available for download https://nrkno.github.io/yr-warning-icons/ or as an NPM package.
 
-### Description
+There is no javascript component for consuming and the NPM package only contain SVGs, PNGs and PDFs.
 
-This project takes SVG exported from illustrator (in `design/`-folder) minifies them and converts them to PDFs and PNGs. The sizes for the PNGs is 32x32, 100x100 and 128x128.
 
 #### How to
+This project takes SVG exported from illustrator (in `design/`-folder) minifies them and converts them to PDFs and PNGs. The sizes for the PNGs is 32x32, 100x100 and 128x128.
 
 Requires Docker or Node.
 
