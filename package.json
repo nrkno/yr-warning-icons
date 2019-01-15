@@ -15,7 +15,9 @@
     "preconvert-icons-win": "npm run preconvert-icons",
     "prebuild-docs": "rimraf dist/index.html",
     "predeploy-docs": "npm run build",
-    "prezip-icons": "rimraf dist/icons.zip"
+    "prezip-icons": "rimraf dist/icons.zip",
+    "prepublish": "npm run build",
+    "postpublish": "npm run deploy-docs"
   },
   "author": "Simen Saegrov",
   "license": "MIT",
