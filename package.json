@@ -1,11 +1,32 @@
 {
-  "name": "yr-warning-icons",
+  "name": "@nrk/yr-warning-icons",
   "version": "1.0.0",
   "description": "Warning icons for yr.no",
-  "main": "index.js",
+  "repository": "https://github.com/nrkno/yr-warning-icons",
   "scripts": {
-    "test": "test"
+    "clean": "rimraf dist/ temp/",
+    "convert-icons": "docker run  -v $PWD/design/:/design -v $PWD/dist:/dist --cap-add=SYS_ADMIN --rm  yr-warning-icons",
+    "zip-icons": "zip dist/icons.zip dist/png/*.png dist/pdf/*.pdf dist/svg/*.svg",
+    "build-docs": "node --no-warnings build/build-gh-pages.js",
+    "build": "npm run convert-icons && npm run build-docs && npm run zip-icons",
+    "deploy-docs": "gh-pages -d dist",
+    "convert-icons-win": "docker run  -v %cd%/design/:/design -v %cd%/dist:/dist --rm --cap-add=SYS_ADMIN  yr-warning-icons",
+    "preconvert-icons": "npm run clean && docker build -t yr-warning-icons .",
+    "preconvert-icons-win": "npm run preconvert-icons",
+    "prebuild-docs": "rimraf dist/index.html",
+    "predeploy-docs": "npm run build",
+    "prezip-icons": "rimraf dist/icons.zip"
   },
   "author": "Simen Saegrov",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/puppeteer": "1.11.1",
+    "gh-pages": "2.0.1",
+    "prettier": "1.15.3",
+    "puppeteer": "1.11.0",
+    "svgo": "1.1.1"
+  },
+  "dependencies": {
+    "rimraf": "2.6.3"
+  }
 }
