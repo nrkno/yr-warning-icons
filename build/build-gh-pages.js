@@ -1,16 +1,76 @@
 const fs = require("fs").promises;
 
 const outputFolder = "dist";
+const iconRegex = /icon-warning-(?<iconName>.+?)(-(?<color>.+?))?.svg/;
 
 (async () => {
   const fileNames = await fs.readdir(`${outputFolder}/svg`);
-  const svgFileNames = fileNames.filter(file => file.includes(".svg"));
+  let svgFileNames = fileNames.filter(file => file.includes(".svg"));
+
+  svgFileNames = getIconsSortedByTypeAndColor(svgFileNames);
 
   await fs.writeFile(
     `${outputFolder}/index.html`,
     wrapContentInHtmlPage([header(), iconCards(svgFileNames)])
   );
 })();
+
+function getIconsSortedByTypeAndColor(svgFileNames) {
+  let iconsWithColorMap = new Map();
+  let iconWithOutColor = [];
+
+  svgFileNames.forEach(svgFileName => {
+    const iconMatch = iconRegex.exec(svgFileName);
+
+    if (iconMatch && iconMatch.groups.color) {
+      const iconName = iconMatch.groups.iconName;
+      const icons = iconsWithColorMap.get(iconName) || [];
+
+      icons.push(svgFileName);
+      iconsWithColorMap.set(iconName, icons);
+    } else if (iconMatch) {
+      iconWithOutColor.push(svgFileName);
+    }
+  });
+
+  const iconsWithColor = [];
+
+  for (const icon of iconsWithColorMap.keys()) {
+    const sortedIcons = iconsWithColorMap.get(icon).sort(sortBasedOnColor);
+    iconsWithColor.push(...sortedIcons);
+  }
+
+  return [...iconsWithColor, ...iconWithOutColor];
+}
+
+/**
+ *
+ * @param {string} a
+ * @param {string} b
+ */
+function sortBasedOnColor(a, b) {
+  const colorOrder = {
+    yellow: 1,
+    orange: 2,
+    red: 3
+  };
+  const iconMatchA = iconRegex.exec(a);
+  const iconMatchB = iconRegex.exec(b);
+
+  if (
+    iconMatchA != null &&
+    iconMatchA.groups.color &&
+    iconMatchB != null &&
+    iconMatchB.groups.color
+  ) {
+    const colorA = iconMatchA.groups.color;
+    const colorB = iconMatchB.groups.color;
+
+    return colorOrder[colorA] - colorOrder[colorB];
+  }
+
+  return 0;
+}
 
 function header() {
   return `
@@ -88,7 +148,7 @@ const wrapContentInHtmlPage = content => `
 
         .icon-cards {
           display: grid;
-          grid-template-columns: 1fr 1fr 1fr 1fr;
+          grid-template-columns: 1fr 1fr 1fr;
           grid-column-gap: 10px;
           grid-row-gap: 10px;
         }
@@ -119,9 +179,9 @@ const wrapContentInHtmlPage = content => `
         }
 
         .icon-card__icons-wrapper img {
-          --icon-size: 75px;
-          height: 75px;
-          width: 75px;
+          --icon-size: 128px;
+          height: 128px;
+          width: 128px;
           height: var(--icon-size);
           width: var(--icon-size);
         }
