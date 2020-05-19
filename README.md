@@ -40,7 +40,7 @@ Each warning icon includes a yellow, orange, and red variant.
 | ForestFire        | icon-warning-forestfire        |
 | Gale              | icon-warning-wind              |
 | Ice               | icon-warning-ice               |
-| Icing             | icon-warning-icing             |
+| Icing             | icon-warning-generic           |
 | Landslide         | icon-warning-landslide         |
 | PolarLow          | icon-warning-polarlow          |
 | Rain              | icon-warning-rain              |
