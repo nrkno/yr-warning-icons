@@ -7,7 +7,7 @@ All icons are available for download https://nrkno.github.io/yr-warning-icons/ o
 There is no javascript component for consuming and the NPM package only contain SVGs, PNGs and PDFs.
 
 
-#### How to
+## How to
 This project takes SVG exported from illustrator (in `design/`-folder) minifies them and converts them to PDFs and PNGs. The sizes for the PNGs is 32x32, 100x100 and 128x128.
 
 Requires Docker or Node.
@@ -25,3 +25,31 @@ With docker:
 2. Build github pages with `npm run build-docs`
 3. Create zipped icons with `npm run zip-icons`
 
+
+
+## Mapping
+
+Each warning icon includes a yellow, orange, and red variant.
+
+| Event type        | Icon id                        |
+|-------------------|--------------------------------|
+| Avalanches        | icon-warning-avalanches        |
+| BlowingSnow       | icon-warning-snow              |
+| DrivingConditions | icon-warning-drivingconditions |
+| Flood             | icon-warning-flood             |
+| ForestFire        | icon-warning-forestfire        |
+| Gale              | icon-warning-wind              |
+| Ice               | icon-warning-ice               |
+| Icing             | icon-warning-icing             |
+| Landslide         | icon-warning-landslide         |
+| PolarLow          | icon-warning-polarlow          |
+| Rain              | icon-warning-rain              |
+| RainFlood         | icon-warning-rainflood         |
+| Snow              | icon-warning-snow              |
+| StormSurge        | icon-warning-stormsurge        |
+| Thunder           | icon-warning-thunder           |
+| Wind              | icon-warning-wind              |
+| Unknown           | icon-warning-generic           |
+
+In addition there is an extreme warning icon, `icon-warning-extreme`,
+which only is available in red.
