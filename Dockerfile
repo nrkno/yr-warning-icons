@@ -1,17 +1,13 @@
-FROM node:11.6.0-alpine
+FROM mhart/alpine-node:13.6.0
 
 # Mainly content from https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#running-puppeteer-in-docker
 
-# Installs latest Chromium (71) package and other dependencies.
+# Installs Chromium package and other dependencies
 RUN apk update && apk upgrade && \
     echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
     echo @edge http://nl.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories && \
     apk add --no-cache \
-      chromium \
-      nss \
-      harfbuzz
-
-
+    chromium=77.0.3865.120-r0
 
 # Tell Puppeteer to skip installing Chrome. We'll be using the installed package.
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
@@ -19,25 +15,24 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 # Set env file telling the script we're running inside docker
 ENV IS_DOCKER=true
 
-# Create a temp folder for outputing temporary files
+# Create a temp folder for outputting temporary files
 RUN mkdir temp
 
-# Add user so we don't need --no-sandbox.
+# Add user so we don't need --no-sandbox
 RUN addgroup -S pptruser && adduser -S -g pptruser pptruser \
     && mkdir -p /home/pptruser/Downloads \
     && chown -R pptruser:pptruser /home/pptruser \
     && chown -R pptruser:pptruser /temp
 
-# Install packages needed
+# Install packages from the lock file
 COPY package.json package-lock.json ./
 RUN npm ci
 
-# Copy Run scripts to execute
+# Copy scripts
 COPY convert/ convert/
 
-# Run everything after as non-privileged user.
+# Run everything after as non-privileged user
 USER pptruser
 
-# Since we use require('fs').promises which is experimental, we turn off warnings
+# Convert the SVG files
 CMD ["node", "convert/convertSvg.js"]
-
