@@ -47,7 +47,7 @@ Each warning icon includes a yellow, orange, and red variant.
 | RainFlood         | icon-warning-rainflood         |
 | Snow              | icon-warning-snow              |
 | StormSurge        | icon-warning-stormsurge        |
-| Thunder           | icon-warning-thunder           |
+| Lightning         | icon-warning-lightning         |
 | Wind              | icon-warning-wind              |
 | Unknown           | icon-warning-generic           |
 
