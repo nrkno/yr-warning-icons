@@ -1,16 +1,17 @@
-FROM mhart/alpine-node:13.6.0
+FROM node:16
 
 # Mainly content from https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#running-puppeteer-in-docker
 
 # Installs Chromium package and other dependencies
-RUN apk update && apk upgrade && \
-    echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
-    echo @edge http://nl.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories && \
-    apk add --no-cache \
-    chromium=77.0.3865.120-r0
+RUN apt-get update \
+ && apt-get install -y chromium \
+    --no-install-recommends
 
 # Tell Puppeteer to skip installing Chrome. We'll be using the installed package.
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+
+# Set env executable path to use in Puppeteer launch options
+ENV PUPPETEER_EXECUTABLE_PATH /usr/bin/chromium
 
 # Set env file telling the script we're running inside docker
 ENV IS_DOCKER=true
@@ -19,10 +20,12 @@ ENV IS_DOCKER=true
 RUN mkdir temp
 
 # Add user so we don't need --no-sandbox
-RUN addgroup -S pptruser && adduser -S -g pptruser pptruser \
-    && mkdir -p /home/pptruser/Downloads \
-    && chown -R pptruser:pptruser /home/pptruser \
-    && chown -R pptruser:pptruser /temp
+# This is currently commented out because we were unable to give the pptruser
+# write access to the mounted `dist` folder.
+# RUN addgroup -S pptruser && adduser -S -g pptruser pptruser \
+#     && mkdir -p /home/pptruser/Downloads \
+#     && chown -R pptruser:pptruser /home/pptruser \
+#     && chown -R pptruser:pptruser /temp
 
 # Install packages from the lock file
 COPY package.json package-lock.json ./
@@ -32,7 +35,7 @@ RUN npm ci
 COPY convert/ convert/
 
 # Run everything after as non-privileged user
-USER pptruser
+# USER pptruser
 
 # Convert the SVG files
 CMD ["node", "convert/convertSvg.js"]
