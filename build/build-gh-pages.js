@@ -1,5 +1,30 @@
 const fs = require("fs").promises;
 
+
+// This object exist only to format the HTML as designed
+// type: warning-type as stored as filename in design/svg-folder
+// title: title that will be desplayed in html
+// Order is based on this site: https://hjelp.yr.no/hc/no/articles/360014052634
+//
+// "type: wind" will look for files named "icon-warning-wind-${yellow/orange/red}.svg"
+const warningTypes = [
+  {type: 'wind', title: 'Gust/Wind'},
+  {type: 'rain', title: 'Rain'},
+  {type: 'rainflood', title: 'Rain Flood'},
+  {type: 'lightning', title: 'Lightning'},
+  {type: 'snow', title: 'Snow'},
+  {type: 'snowstorm', title: 'Snow Storm'},
+  {type: 'icing', title: 'Ice'},
+  {type: 'stormsurge', title: 'Stormsurge'},
+  {type: 'forestfire', title: 'Forestfire'},
+  {type: 'flood', title: 'Flood'},
+  {type: 'landslide', title: 'Landslide'},
+  {type: 'avalanches', title: 'Avalanches'},
+  {type: 'polarlow', title: 'Polarlow'},
+  {type: 'generic', title: 'Ising'}
+];
+
+
 const outputFolder = "dist";
 const iconRegex = /icon-warning-(?<iconName>.+?)(-(?<color>.+?))?.svg/;
 
@@ -14,6 +39,7 @@ const iconRegex = /icon-warning-(?<iconName>.+?)(-(?<color>.+?))?.svg/;
     wrapContentInHtmlPage([header(), iconCards(svgFileNames)])
   );
 })();
+
 
 function getIconsSortedByTypeAndColor(svgFileNames) {
   let iconsWithColorMap = new Map();
@@ -86,9 +112,27 @@ function zipFileDownloadLink(linkText) {
   `;
 }
 
+
 function iconCards(svgFileNames) {
-  return `
-    <div class="icon-cards">${svgFileNames.map(iconCard).join("")}</div>
+  let warningGroups = [];
+  warningTypes.map((warning) => {
+    warningGroups.push({
+      title: warning.title,
+      icons: [
+        ...(svgFileNames.includes(`icon-warning-${warning.type}-yellow.svg`) ? [`icon-warning-${warning.type}-yellow.svg`]: []),
+        ...(svgFileNames.includes(`icon-warning-${warning.type}-orange.svg`) ? [`icon-warning-${warning.type}-orange.svg`]: []),
+        ...(svgFileNames.includes(`icon-warning-${warning.type}-red.svg`) ? [`icon-warning-${warning.type}-red.svg`]: [])
+      ] 
+    })
+  })
+
+  let groupsHtml = [];
+
+  warningGroups.map((group) => {
+    groupsHtml.push( `<h2>${group.title}</h2><div class="icon-groups">${group.icons.map(iconCard).join('')}</div>`);
+  })
+    return `
+  <div class="icon-cards">${groupsHtml.join("")}</div>
   `;
 }
 
@@ -146,11 +190,10 @@ const wrapContentInHtmlPage = content => `
           padding: 10px;
         }
 
-        .icon-cards {
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr;
-          grid-column-gap: 10px;
-          grid-row-gap: 10px;
+        .icon-groups {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
         }
 
         .icon-card {
