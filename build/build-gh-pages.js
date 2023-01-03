@@ -7,22 +7,20 @@ const fs = require("fs").promises;
 // color: wich colored svg to look for
 // Order is based on design i figma
 const warningTypes = [
-  {type: 'avalanches', title: 'Avalanches', colors: ['yellow', 'orange', 'red']},
-  {type: 'landslide', title: 'Landslide', colors: ['yellow', 'orange', 'red']},
-  {type: 'flood', title: 'Flood', colors: ['yellow', 'orange', 'red']},
   {type: 'wind', title: 'Gust/Wind', colors: ['yellow', 'orange', 'red']},
-  {type: 'wind', title: 'Gale', colors: ['yellow']},
   {type: 'rain', title: 'Rain', colors: ['yellow', 'orange', 'red']},
   {type: 'rainflood', title: 'Rain Flood', colors: ['yellow', 'orange']},
   {type: 'lightning', title: 'Lightning', colors: ['yellow']},
   {type: 'snow', title: 'Snow', colors: ['yellow', 'orange', 'red']},
   {type: 'snowstorm', title: 'Snow Storm', colors: ['yellow']},
-  {type: 'icing', title: 'Icing', colors: ['yellow', 'orange', 'red']},
+  {type: 'ice', title: 'Ice', colors: ['yellow']},
   {type: 'stormsurge', title: 'Stormsurge', colors: ['yellow', 'orange', 'red']},
-  {type: 'polarlow', title: 'Polarlow', colors: ['yellow', 'orange']},
   {type: 'forestfire', title: 'Forestfire', colors: ['yellow', 'orange']},
-  {type: 'ice', title: 'Ice', colors: ['yellow', 'orange', 'red']},
-  {type: 'generic', title: 'Ising', colors: ['yellow', 'orange']}
+  {type: 'flood', title: 'Flood', colors: ['yellow', 'orange', 'red']},
+  {type: 'landslide', title: 'Landslide', colors: ['yellow', 'orange', 'red']},
+  {type: 'avalanches', title: 'Avalanches', colors: ['yellow', 'orange', 'red']},
+  {type: 'polarlow', title: 'Polarlow', colors: ['yellow', 'orange']},
+  {type: 'generic', title: 'Icing', colors: ['yellow', 'orange']}
 ];
 
 
