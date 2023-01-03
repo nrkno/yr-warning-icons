@@ -17,10 +17,11 @@ const warningTypes = [
   {type: 'lightning', title: 'Lightning', colors: ['yellow']},
   {type: 'snow', title: 'Snow', colors: ['yellow', 'orange', 'red']},
   {type: 'snowstorm', title: 'Snow Storm', colors: ['yellow']},
-  {type: 'icing', title: 'Ice', colors: ['yellow', 'orange', 'red']},
+  {type: 'icing', title: 'Icing', colors: ['yellow', 'orange', 'red']},
   {type: 'stormsurge', title: 'Stormsurge', colors: ['yellow', 'orange', 'red']},
   {type: 'polarlow', title: 'Polarlow', colors: ['yellow', 'orange']},
   {type: 'forestfire', title: 'Forestfire', colors: ['yellow', 'orange']},
+  {type: 'ice', title: 'Ice', colors: ['yellow', 'orange', 'red']},
   {type: 'generic', title: 'Ising', colors: ['yellow', 'orange']}
 ];
 
