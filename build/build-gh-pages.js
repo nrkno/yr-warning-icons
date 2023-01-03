@@ -4,24 +4,24 @@ const fs = require("fs").promises;
 // This object exist only to format the HTML as designed
 // type: warning-type as stored as filename in design/svg-folder
 // title: title that will be desplayed in html
-// Order is based on this site: https://hjelp.yr.no/hc/no/articles/360014052634
-//
-// "type: wind" will look for files named "icon-warning-wind-${yellow/orange/red}.svg"
+// color: wich colored svg to look for
+// Order is based on design i figma
 const warningTypes = [
-  {type: 'wind', title: 'Gust/Wind'},
-  {type: 'rain', title: 'Rain'},
-  {type: 'rainflood', title: 'Rain Flood'},
-  {type: 'lightning', title: 'Lightning'},
-  {type: 'snow', title: 'Snow'},
-  {type: 'snowstorm', title: 'Snow Storm'},
-  {type: 'icing', title: 'Ice'},
-  {type: 'stormsurge', title: 'Stormsurge'},
-  {type: 'forestfire', title: 'Forestfire'},
-  {type: 'flood', title: 'Flood'},
-  {type: 'landslide', title: 'Landslide'},
-  {type: 'avalanches', title: 'Avalanches'},
-  {type: 'polarlow', title: 'Polarlow'},
-  {type: 'generic', title: 'Ising'}
+  {type: 'avalanches', title: 'Avalanches', colors: ['yellow', 'orange', 'red']},
+  {type: 'landslide', title: 'Landslide', colors: ['yellow', 'orange', 'red']},
+  {type: 'flood', title: 'Flood', colors: ['yellow', 'orange', 'red']},
+  {type: 'wind', title: 'Gust/Wind', colors: ['yellow', 'orange', 'red']},
+  {type: 'wind', title: 'Gale', colors: ['yellow']},
+  {type: 'rain', title: 'Rain', colors: ['yellow', 'orange', 'red']},
+  {type: 'rainflood', title: 'Rain Flood', colors: ['yellow', 'orange']},
+  {type: 'lightning', title: 'Lightning', colors: ['yellow']},
+  {type: 'snow', title: 'Snow', colors: ['yellow', 'orange', 'red']},
+  {type: 'snowstorm', title: 'Snow Storm', colors: ['yellow']},
+  {type: 'icing', title: 'Ice', colors: ['yellow', 'orange', 'red']},
+  {type: 'stormsurge', title: 'Stormsurge', colors: ['yellow', 'orange', 'red']},
+  {type: 'polarlow', title: 'Polarlow', colors: ['yellow', 'orange']},
+  {type: 'forestfire', title: 'Forestfire', colors: ['yellow', 'orange']},
+  {type: 'generic', title: 'Ising', colors: ['yellow', 'orange']}
 ];
 
 
@@ -114,22 +114,20 @@ function zipFileDownloadLink(linkText) {
 
 
 function iconCards(svgFileNames) {
-  let warningGroups = [];
-  warningTypes.map((warning) => {
-    warningGroups.push({
+  
+  warningGroups = warningTypes.map((warning) => {
+    return {
       title: warning.title,
       icons: [
-        ...(svgFileNames.includes(`icon-warning-${warning.type}-yellow.svg`) ? [`icon-warning-${warning.type}-yellow.svg`]: []),
-        ...(svgFileNames.includes(`icon-warning-${warning.type}-orange.svg`) ? [`icon-warning-${warning.type}-orange.svg`]: []),
-        ...(svgFileNames.includes(`icon-warning-${warning.type}-red.svg`) ? [`icon-warning-${warning.type}-red.svg`]: [])
+        ...(svgFileNames.includes(`icon-warning-${warning.type}-yellow.svg`) && warning.colors.includes('yellow') ? [`icon-warning-${warning.type}-yellow.svg`]: []),
+        ...(svgFileNames.includes(`icon-warning-${warning.type}-orange.svg`) && warning.colors.includes('orange') ? [`icon-warning-${warning.type}-orange.svg`]: []),
+        ...(svgFileNames.includes(`icon-warning-${warning.type}-red.svg`) && warning.colors.includes('red') ? [`icon-warning-${warning.type}-red.svg`]: [])
       ] 
-    })
+    }
   })
 
-  let groupsHtml = [];
-
-  warningGroups.map((group) => {
-    groupsHtml.push( `<h2>${group.title}</h2><div class="icon-groups">${group.icons.map(iconCard).join('')}</div>`);
+  const groupsHtml = warningGroups.map((group) => {
+    return `<h2>${group.title}</h2><div class="icon-groups">${group.icons.map(iconCard).join('')}</div>`;
   })
     return `
   <div class="icon-cards">${groupsHtml.join("")}</div>
