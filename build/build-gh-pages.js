@@ -155,10 +155,6 @@ const wrapContentInHtmlPage = content => `
       <meta charset="UTF-8" />
       <title>Yr Warning Icons</title>
       <style>
-        body {
-          background-color: lightgray;
-        }
-
         .header {
           background-color: white;
           padding: 10px;
