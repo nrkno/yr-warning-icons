@@ -4,7 +4,7 @@
   "description": "Warning icons for yr.no",
   "repository": "https://github.com/nrkno/yr-warning-icons",
   "scripts": {
-    "clean": "rimraf dist/ temp/",
+    "clean": "rimraf ./dist ./temp && mkdir ./dist ./temp",
     "convert-icons": "docker run  -v $PWD/design/:/design -v $PWD/dist:/dist --cap-add=SYS_ADMIN --rm  yr-warning-icons",
     "zip-icons": "zip dist/icons.zip dist/png/*.png dist/pdf/*.pdf dist/svg/*.svg",
     "build-docs": "node --no-warnings build/build-gh-pages.js",

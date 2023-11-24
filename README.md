@@ -35,7 +35,6 @@ Each warning icon includes a yellow, orange, and red variant.
 |-------------------|--------------------------------|
 | Avalanches        | icon-warning-avalanches        |
 | BlowingSnow       | icon-warning-snow              |
-| DrivingConditions | icon-warning-drivingconditions |
 | Flood             | icon-warning-flood             |
 | ForestFire        | icon-warning-forestfire        |
 | Gale              | icon-warning-wind              |

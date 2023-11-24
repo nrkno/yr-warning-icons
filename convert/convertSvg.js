@@ -11,7 +11,11 @@ const inputFolder = `design/svg`;
 
 const puppeteerOptions = process.env.IS_DOCKER
   ? {
-      executablePath: "/usr/bin/chromium-browser"
+      executablePath:process.env.PUPPETEER_EXECUTABLE_PATH,
+
+      // We need run Puppeteer without a sandbox because because we are running as root.
+      // See `Dockerfile` for more details.
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
     }
   : undefined;
 

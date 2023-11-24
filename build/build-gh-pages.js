@@ -1,5 +1,29 @@
 const fs = require("fs").promises;
 
+
+// This object exist only to format the HTML as designed
+// type: warning-type as stored as filename in design/svg-folder
+// title: title that will be desplayed in html
+// color: wich colored svg to look for
+// Order is based on design i figma
+const warningTypes = [
+  {type: 'wind', title: 'Gust/Wind', colors: ['yellow', 'orange', 'red']},
+  {type: 'rain', title: 'Rain', colors: ['yellow', 'orange', 'red']},
+  {type: 'rainflood', title: 'Rain Flood', colors: ['yellow', 'orange']},
+  {type: 'lightning', title: 'Lightning', colors: ['yellow']},
+  {type: 'snow', title: 'Snow', colors: ['yellow', 'orange', 'red']},
+  {type: 'snowstorm', title: 'Snow Storm', colors: ['yellow']},
+  {type: 'ice', title: 'Ice', colors: ['yellow']},
+  {type: 'stormsurge', title: 'Stormsurge', colors: ['yellow', 'orange', 'red']},
+  {type: 'forestfire', title: 'Forestfire', colors: ['yellow', 'orange']},
+  {type: 'flood', title: 'Flood', colors: ['yellow', 'orange', 'red']},
+  {type: 'landslide', title: 'Landslide', colors: ['yellow', 'orange', 'red']},
+  {type: 'avalanches', title: 'Avalanches', colors: ['yellow', 'orange', 'red']},
+  {type: 'polarlow', title: 'Polarlow', colors: ['yellow', 'orange']},
+  {type: 'generic', title: 'Icing', colors: ['yellow', 'orange']}
+];
+
+
 const outputFolder = "dist";
 const iconRegex = /icon-warning-(?<iconName>.+?)(-(?<color>.+?))?.svg/;
 
@@ -14,6 +38,7 @@ const iconRegex = /icon-warning-(?<iconName>.+?)(-(?<color>.+?))?.svg/;
     wrapContentInHtmlPage([header(), iconCards(svgFileNames)])
   );
 })();
+
 
 function getIconsSortedByTypeAndColor(svgFileNames) {
   let iconsWithColorMap = new Map();
@@ -86,9 +111,25 @@ function zipFileDownloadLink(linkText) {
   `;
 }
 
+
 function iconCards(svgFileNames) {
-  return `
-    <div class="icon-cards">${svgFileNames.map(iconCard).join("")}</div>
+  
+  warningGroups = warningTypes.map((warning) => {
+    return {
+      title: warning.title,
+      icons: [
+        ...(svgFileNames.includes(`icon-warning-${warning.type}-yellow.svg`) && warning.colors.includes('yellow') ? [`icon-warning-${warning.type}-yellow.svg`]: []),
+        ...(svgFileNames.includes(`icon-warning-${warning.type}-orange.svg`) && warning.colors.includes('orange') ? [`icon-warning-${warning.type}-orange.svg`]: []),
+        ...(svgFileNames.includes(`icon-warning-${warning.type}-red.svg`) && warning.colors.includes('red') ? [`icon-warning-${warning.type}-red.svg`]: [])
+      ] 
+    }
+  })
+
+  const groupsHtml = warningGroups.map((group) => {
+    return `<h2>${group.title}</h2><div class="icon-groups">${group.icons.map(iconCard).join('')}</div>`;
+  })
+    return `
+  <div class="icon-cards">${groupsHtml.join("")}</div>
   `;
 }
 
@@ -114,10 +155,6 @@ const wrapContentInHtmlPage = content => `
       <meta charset="UTF-8" />
       <title>Yr Warning Icons</title>
       <style>
-        body {
-          background-color: lightgray;
-        }
-
         .header {
           background-color: white;
           padding: 10px;
@@ -146,11 +183,10 @@ const wrapContentInHtmlPage = content => `
           padding: 10px;
         }
 
-        .icon-cards {
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr;
-          grid-column-gap: 10px;
-          grid-row-gap: 10px;
+        .icon-groups {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
         }
 
         .icon-card {
